@@ -104,8 +104,4 @@ def main():
     random.shuffle(sentencesbox)
     for i in range(len(sentencesbox)):
         print(sentencesbox[i])
-##    print(declar())
-##    print(negat())
-##    print(interrog())
-##    print(imper())
 main()
