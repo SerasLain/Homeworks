@@ -11,7 +11,6 @@ def writeorderlist(order):
 
         
 def findorder(text):
-    regwords = r'[W]Отряд:&nbsp;</td>\n<td width="60%" align="left"><a href=.*?>(Хищные)<'
     regword = r'Отряд.*?>([\w]*)</a></td>'
     matched = re.search(regword, text, flags = re.DOTALL)
     order = matched.group(1)
