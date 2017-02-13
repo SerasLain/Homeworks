@@ -50,5 +50,3 @@ def main():
     for word in s:
         file.write(word+','+str(fdict[word])+'\n')
     file.close()
-
-## проблема с сортировкой
