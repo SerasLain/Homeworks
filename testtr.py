@@ -52,7 +52,11 @@ def writedict(wordlist):
         file.write(word+','+str(fdict[word])+'\n')
     file.close()
 
+    
 def main():
     wordlist = normaltext(readtext())
     countwords(wordlist)
     writedict(wordlist)
+
+   
+main()
