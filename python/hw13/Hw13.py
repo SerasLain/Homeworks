@@ -8,22 +8,42 @@ def filesaround():
     return arrfiles
 
 
-def eatextension(arrnames):
+def file_ext(arrfiles):
     ## возвращает на выходе словарь, где ключ - название файла, а значение - его расширение.
     ## как следствие - названия не повторяются
-    noextnames = [re.search(r'(.*)\.(.*)', name) for name in arrnames]
-    dictnames = {name.group(1): name.group(2) for name in noextnames}
-    return dictnames
+    arrnames = [re.search(r'(.*)\.(.*)', name) for name in arrfiles]
+    ## dictnames = {name.group(1): name.group(2) for name in noextnames}
+    return arrnames
 
 
-def fileswith(dictnames):
-    ## возвращает список названий файлов, без повторов
-    arrfileswith = [key for key in dictnames.keys() if re.search('[.,!_;]', key) != None]
+def fileswith(arrnames):
+    ## возвращает список названий файлов со знаками препинания
+    arrfileswith = [key.group(0) for key in arrnames if re.search('[.,!_;]', key.group(1)) != None]
     return arrfileswith
 
+        
+def exercize():
+    allelementsindir = os.listdir('.')
+    arrfiles = [name for name in allelementsindir if os.path.isfile(name) == True]
+    arrfiles = file_ext(arrfiles)
+    arrdirs = [name for name in allelementsindir if os.path.isdir(name) == True]
+    filenames = [file.group(1) for file in arrfiles]
+    unicarr = []
+    for name in arrfiles:
+        if name.group(1) not in unicarr:
+            unicarr.append(name.group(1))
+    for name in arrdirs:
+        if name not in unicarr:
+            unicarr.append(name)
+    return unicarr
 
 def main():
-    for word in fileswith(eatextension(filesaround())):
+    ## 1. Надеюсь, я верно поняла задание, и тут надо с повторами и расширениями
+    print('Это на первое задание')
+    for word in fileswith(file_ext(filesaround())):
         print(word)
-
+    ## 2. Названия всего без повторов
+    print('А это на второе')
+    for word in exercize():
+        print(word)
 main()
