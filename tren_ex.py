@@ -65,22 +65,17 @@ def get_idx(words_ins, text_arr):
     return idx_array
 
 def make_string(idx_arr, text_arr):
-    ## На самом деле, эксепшны нафиг не нужны: отрицательные индексы просто берутся с конца, как в срезах. Это не ок, но это решается адхоково, например, приписать условие, проверяющее отрицательность i. Мне лень исправлять, пусть так останется
     line_arr = []
     ## возвращает строку, как в задании
     for i in idx_arr:
         left_context = [] ## делаю по отдельности левый и правый контекст
-        for l in range(i-3, i-1):
-            try:
+        for l in range(i-3, i):
+            if l >= 0:
                 left_context.append(text_arr[l])
-            except Exception: ## если вдруг нет в начале трех слов
-                 continue
         right_context = []
-        for l in range(i+1, i+3):
-            try:
+        for l in range(i+1, i+4):
+            if l <= len(text_arr):
                 right_context.append(text_arr[l])
-            except Exception:
-                break ##потому что если первого слова справа нет, то второго нет и подавно
         line = ' '.join(left_context)+'\t'+text_arr[i]+'\t'+' '.join(right_context)
         line_arr.append(line)
     return line_arr
