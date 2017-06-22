@@ -66,7 +66,7 @@ def get_idx(words_ins, text_arr):
 
 def make_string(idx_arr, text_arr):
     line_arr = []
-    ## возвращает строку, как в задании
+    ## возвращает массив строк, как в задании
     for i in idx_arr:
         left_context = [] ## делаю по отдельности левый и правый контекст
         for l in range(i-3, i):
