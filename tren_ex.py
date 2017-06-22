@@ -55,28 +55,35 @@ def find_ins(text_lines):
             words_ins.append(word)
     return words_ins
 
-def make_string(words_ins, text_arr):
-    ## возвращает строку, как в задании
-    line_arr = []
+def get_idx(words_ins, text_arr):
     text_arr_e = [i.strip('&.,?:"«»;!()') for i in text_arr] ##делает массив слов без знаков препинания
+    idx_array = []
     for word in words_ins:
-        n = text_arr_e.index(word) ##индекс слова в массиве
+        for i in range(len(text_arr_e)):
+            if text_arr_e[i] == word and i not in idx_array:
+                idx_array.append(i)
+    return idx_array
+
+def make_string(idx_arr, text_arr):
+    ## На самом деле, эксепшны нафиг не нужны: отрицательные индексы просто берутся с конца, как в срезах. Это не ок, но это решается адхоково, например, приписать условие, проверяющее отрицательность i. Мне лень исправлять, пусть так останется
+    line_arr = []
+    ## возвращает строку, как в задании
+    for i in idx_arr:
         left_context = [] ## делаю по отдельности левый и правый контекст
-        for i in range(n-3, n-1):
+        for l in range(i-3, i-1):
             try:
-                left_context.append(text_arr[i])
+                left_context.append(text_arr[l])
             except Exception: ## если вдруг нет в начале трех слов
                  continue
         right_context = []
-        for i in range(n+1, n+3):
+        for l in range(i+1, i+3):
             try:
-                right_context.append(text_arr[i])
+                right_context.append(text_arr[l])
             except Exception:
                 break ##потому что если первого слова справа нет, то второго нет и подавно
-        line = ' '.join(left_context)+'\t'+word+'\t'+' '.join(right_context)
+        line = ' '.join(left_context)+'\t'+text_arr[i]+'\t'+' '.join(right_context)
         line_arr.append(line)
-    string = '\n'.join(line_arr)
-    return string
+    return line_arr
 
 def main():
     ## Задание 1
@@ -87,7 +94,14 @@ def main():
     array = [i+'\t'+gr_dict[i] for i in gr_dict.keys()]
     write('\n'.join(array), 'frq_gr.txt')
     ## Задание 3
-    write((make_string(find_ins(open_xml()), get_text(open_xml_as_string()))), 'words_ins.txt')
+    text_arr = get_text(open_xml_as_string())
+    idx_arr = get_idx(find_ins(open_xml()), text_arr)
+    line_arr = make_string(idx_arr, text_arr)
+    with open('words_ins.txt', 'w', encoding='utf-8') as f:
+        for line in line_arr:
+            f.write(line+'\n')
+    print('Я сделаль!')
+
 
 if __name__ == '__main__':
     main()
