@@ -18,14 +18,17 @@ def find_meta(text_str):
     arr = [author, topic]
     return arr
 
+
 def write_to_csv(arr, name):
     with open(name, 'a', encoding='cp1251') as f:
         f.write(arr[2]+'\t'+arr[0]+'\t'+arr[1]+'\n')
-                      
+         
+            
 def write_s(smth, filename):
     with open(filename, 'a', encoding = 'utf-8') as f:
         f.write(smth)
 
+        
 def make_table():
     array_of_arr = []
     for root, dirs, files in os.walk('news'):
@@ -37,12 +40,16 @@ def make_table():
             array_of_arr.append(arr)
     for arr in array_of_arr:
         write_to_csv(arr, 'table_meta.csv')
+        
+        
 def get_text(text_str):
     text = re.sub('<.*?>', '', text_str)
     text = re.sub('\n', '', text)
     return text
 
+
 def make_s(text_str):
+    ##Кажись, в регулярке баг
     array_of_inf = []
     ds_arr = re.finditer(r'<se>(.*)?<\se>\n', text_str, flags=re.DOTALL)
     for d_sentence in ds_arr:
@@ -69,7 +76,6 @@ def find_bigr():
                 write_s(i[0]+'\t'+i[1], 'bigrams.txt')
         
 
-
 def main():
     ##1 task
     d = count_sentence()
@@ -77,6 +83,8 @@ def main():
         write_s(key+'\t'+d[key]+'\n', 'sentences.txt')
     print('Done!')
     ##2 task
+    with open('table_meta.csv', 'a', encoding='cp1251') as f:
+        f.write('Имя файла'+'\t'+'Автор'+'\t'+'Тематика'+'\n')
     make_table()
     print('Done!')
     ## 3 task
