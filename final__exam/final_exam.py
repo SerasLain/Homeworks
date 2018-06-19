@@ -1,6 +1,8 @@
 import os
 import shutil
 import re
+
+#для каждого предложения считает его частоту в тексте и делает из этого словарь
 def count_sentence():
     dictionary = {}
     for root, dirs, files in os.walk('news'):
@@ -11,29 +13,29 @@ def count_sentence():
             dictionary[f] = str(counter)
     return dictionary
 
-
+#Ищет информацию в тексте
 def find_meta(text_str):
     author = re.search(r'<meta content="(.*)" name="author">', text_str).group(1)
     topic = re.search(r'<meta content="(.*)" name="topic">', text_str).group(1)
     arr = [author, topic]
     return arr
 
-
+#Пишет в csv инфу из массива с информацией
 def write_to_csv(arr, name):
     with open(name, 'a', encoding='cp1251') as f:
         f.write(arr[2]+'\t'+arr[0]+'\t'+arr[1]+'\n')
          
-            
+#Записывает строку в файл
 def write_s(smth, filename):
     with open(filename, 'a', encoding = 'utf-8') as f:
         f.write(smth)
 
-        
+#Ходит по папкам сверху вниз, открывает статьи, находит в каждой инфу и сразу записывает в таблицу         
 def make_table():
     array_of_arr = []
     for root, dirs, files in os.walk('news'):
         for f in files:
-            with open(os.path.join(root, f), 'r', encoding='cp1251') as text:
+            with open(os.path.join(root, f), 'r', encoding='cp1251') as text: #Путь универсален для всех ОС
                 t = text.read()
             arr = find_meta(t)
             arr.append(f)
@@ -42,12 +44,13 @@ def make_table():
         write_to_csv(arr, 'table_meta.csv')
         
         
+#Вытаскивает текст статьи
 def get_text(text_str):
     text = re.sub('<.*?>', '', text_str)
     text = re.sub('\n', '', text)
     return text
 
-
+#Находит предложения в тексте по тегам
 def make_s(text_str):
     ##Кажись, в регулярке баг
     array_of_inf = []
